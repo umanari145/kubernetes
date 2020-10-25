@@ -5,7 +5,6 @@
 
 イメージからの立ち上げ。8080ポートでnginxを起動
 ```
-
 docker (container) run --name mynginx -d -p 8080:80 nginx:1.9.15-alpine
 
 # --name コンテナの名称
@@ -18,9 +17,9 @@ docker (container) run --name mynginx -d -p 8080:80 nginx:1.9.15-alpine
 コンテナ内に対して何かコマンドを打ちたい時
 ```
 #任意のコマンド
-docker exec mynginx date
+docker exec mynginx sh -c "echo 'aaaa'"
 
 #コンテナ何に入る時
-docker exec -it mynginx /bin/sh
+docker exec -it mynginx /bin/sh or sh
 ```
 
