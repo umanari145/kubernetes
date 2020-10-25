@@ -3,11 +3,14 @@
 
 ## dockerの復習
 
+### nginxサンプル
+
 イメージからの立ち上げ。8080ポートでnginxを起動
 ```
-docker (container) run --name mynginx -d -p 8080:80 nginx:1.9.15-alpine
+docker (container) run --name mynginx  --rm -d -p 8080:80 nginx:1.9.15-alpine
 
 # --name コンテナの名称
+# --rm 終了時に自動的に削除
 # -d バックグラウンドで実行(コンソールに結果が出てこない)
 # -it コンテン内に入ることが可能になる(nginxなどのサーバー入らないがバックグラウンドでプログラムが動かない場合はこれがないと落ちる)
 # -p ポートバインディング (ホストのport):(コンテナのport)
@@ -28,12 +31,38 @@ docker exec -it mynginx /bin/sh or sh
 docker search python
 ```
 
-pythonでのサンプル
+### pythonでのサンプル
 ```
-docker run --name mypython -d -it -p 8080:80 python:3.7.9-sli
+docker run --name mypython -d -it -p 8080:80 python:3.7.5-slim
 ```
 
 ファイルをコンテナ内に送る
 ```
 docker cp server.py mypython(コンテナ内):/(パス)
 ```
+
+内部のIPアドレスを調査
+```
+docker exec mynginx hostname -i
+```
+
+### ネットワークに関して
+```
+docker network ls
+NETWORK ID          NAME                      DRIVER              SCOPE
+88ce01ffbbad        bridge                    bridge              local
+#NAME→bridgeはdefaultのNAT
+
+docker container port 4f62ce0359ea (コンテナID)
+#ポートフォーワードが下記のように現れる
+80/tcp -> 0.0.0.0:8080
+```
+
+### docker build
+
+Dockefileからの起動
+```
+docker image build ./ -t mypython
+```
+
+
