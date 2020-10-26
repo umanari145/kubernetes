@@ -8,11 +8,11 @@ REDIS = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 APP_PORT = int(os.environ['PORT'])
 app = Flask('app server')
 
-@app.route('/api/v1/keys', methods=['GET'])
+@app.route('/api/v1/keys/', methods=['GET'])
 def api_keys():
     data = {}
     cursor = '0'
-    while cursor != '0':
+    while cursor != 0:
         cursor, keys = REDIS.scan(cursor=cursor, count=1000000)
         if len(keys) == 0:
             break
@@ -22,7 +22,7 @@ def api_keys():
     return success(data)
 
 @app.route('/api/v1/keys/<key>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def api_keys(keys):
+def api_key(key):
     if not isalnum(key):
         return error(400.1)
     body = request.get_data().decode().strip()
@@ -31,32 +31,32 @@ def api_keys(keys):
             return error(400.2)
         if not isalnum(body):
             return error(400.3)
-        def get():
-            value = REDIS.get(key)
-            if values is not None:
-                return success({key:value.decode()})
-        def post():
-            if REDIS.get(key) is not None:
-                return error(409)
-            REDIS.set(key, body)
-            return success({key:body})
-        def put():
-            REDIS.set(key, body)
-            return success({key:body})
-        def delete():
-            if REDIS.delete(key) == 0:
-                return error(404)
-            return success({})
-        fdict = {'GET':get, 'POST':post, 'PUT':put, 'DELETE':delete}
-        return fdict[request.method]()
+    def get():
+        value = REDIS.get(key)
+        if values is not None:
+            return success({key:value.decode()})
+    def post():
+        if REDIS.get(key) is not None:
+            return error(409)
+        REDIS.set(key, body)
+        return success({key:body})
+    def put():
+        REDIS.set(key, body)
+        return success({key:body})
+    def delete():
+        if REDIS.delete(key) == 0:
+            return error(404)
+        return success({})
+    fdict = {'GET':get, 'POST':post, 'PUT':put, 'DELETE':delete}
+    return fdict[request.method]()
 
 def error(code):
     message = {
-        400.1 = "bad request. key must be almun",
-        400.2 = "bad request. post/put needs value on body",
-        400.3 = "bad request. value must be Alnum",
-        404 = "resource not found",
-        409 = "resource conflict. resource already exist"
+        400.1: "bad request. key must be almun",
+        400.2: "bad request. post/put needs value on body",
+        400.3: "bad request. value must be Alnum",
+        404: "resource not found",
+        409: "resource conflict. resource already exist"
     }
 
     return (jsonify({'error':message[code], 'code':int(code)}), int(code))
