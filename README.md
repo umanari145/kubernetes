@@ -65,4 +65,20 @@ Dockefileからの起動
 docker image build ./ -t mypython
 ```
 
+## web-app-dbのアプリ
+- web リクエストを受け付けるフロント部分(リバースプロキシでappと連携)
+- app RESTAPIを定義
+- db REDISで定義
+
+### ファイル構成
+- app 
+    - Dockerfile appのDockerfile
+    - server.py flaskでのRESTAPIを定義
+- web
+    - html 静的ファイル
+    - Dockerfile webのDockerfile
+    - nginx.tpl nginxのテンプレート
+    - start.sh nginx.tplからnginx.confを作成
+
+
 
