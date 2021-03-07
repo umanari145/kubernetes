@@ -81,4 +81,51 @@ docker image build ./ -t mypython
     - start.sh nginx.tplからnginx.confを作成
 
 
+### kubernetesコマンド
 
+接続情報の確認
+```
+kubectl config view
+```
+
+ノード情報の返却
+```
+kubectl get nodes
+```
+
+podの立ち上げ
+```
+kubectl run nginx
+```
+
+podのチェック
+```
+kubectl get pods
+
+//結果
+NAME      READY   STATUS              RESTARTS   AGE
+mynginx   0/1     ContainerCreating   0          38s
+
+//STATUS=RUNNINGになったら正式稼働
+```
+
+podの詳細情報
+```
+kubectl describe pods nginx
+```
+
+podの中に入る(docker exec -itと同じっぽい)
+```
+kubectl exec -it nginx sh
+```
+アクセスできるようにする
+```
+kubectl expose deployment nginx --port 80 --type LoadBalancer
+```
+
+podの削除
+```
+kubectl delete pod mynginx
+```
+
+kubernetesを起動すると当たり前だがdockerも合わせて起動している
