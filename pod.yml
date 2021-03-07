@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+  labels:
+    svc2pod: web
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.17.6-alpine
+    ports:
+    - name: http
+      containerPort: 80

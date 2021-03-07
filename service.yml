@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    svc2pod: web
+  ports: 
+  - port: 80
+    targetPort: http
+    nodePort: 30000
+  type: NodePort

@@ -129,3 +129,30 @@ kubectl delete pod mynginx
 ```
 
 kubernetesを起動すると当たり前だがdockerも合わせて起動している
+
+### yamlファイルでの起動
+- pod.yml podのyamlファイル
+- service.yml serviceのyamlファイル
+
+pod(service)の起動コマンド(runコマンドをファイルで代替する方法)
+```
+kubectl apply -f pod.yml(service.yml) 
+```
+
+pod(service)の削除コマンド
+```
+kubectl delete -f pod.yml(service.yml)
+```
+
+起動serviceの確認
+```
+kubectl get services
+//動いているサービスと実際に紐づいてるサービスを確認できる
+NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes    ClusterIP   10.96.0.1       <none>        443/TCP        93m
+web-service   NodePort    10.98.120.120   <none>        80:30000/TCP   14s
+```
+この段階で下記URLにアクセスして、nginxの画面が見えればOK
+http://localhost:30000/
+
+もちろんdockerも起動している
