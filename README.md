@@ -156,3 +156,16 @@ web-service   NodePort    10.98.120.120   <none>        80:30000/TCP   14s
 http://localhost:30000/
 
 もちろんdockerも起動している
+
+### wordpress+mysql
+
+```
+# mysqlのpodとserviceを起動
+kubectl apply -f mysql_pod.yml -f mysql_service.yml 
+
+# wordpressのpodとserviceを起動
+kubectl apply -f mysql_pod.yml -f mysql_service.yml 
+
+```
+http://localhost/
+でwordpressログイン画面へ遷移
