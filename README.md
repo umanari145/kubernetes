@@ -177,6 +177,14 @@ NAME      READY   STATUS              RESTARTS   AGE
 mynginx   0/1     ContainerCreating   0          38s
 
 //STATUS=RUNNINGになったら正式稼働
+
+// STATUS
+// Running： 稼働中
+// Pending： Pod起動待ち
+// ImageNotReady: dockerイメージ取得中
+// PullImageError： dockerイメージ取得失敗
+// CreatingContainer: Pod(コンテナ)起動中
+// Error: エラー
 ```
 
 pod の詳細情報
@@ -246,9 +254,43 @@ http://localhost:30000/
 kubectl apply -f mysql_pod.yml -f mysql_service.yml
 
 # wordpressのpodとserviceを起動
-kubectl apply -f mysql_pod.yml -f mysql_service.yml
+kubectl apply -f wordpress_pod.yml -f wordpress_service.yml
 
 ```
 
 http://localhost/
 で wordpress ログイン画面へ遷移
+
+デバッグ
+
+```
+kubectl describe pods
+以下のようなログがはかれる(エラー時)
+・・・
+Events:
+  Type     Reason     Age                  From               Message
+  ----     ------     ----                 ----               -------
+  Normal   Scheduled  18m                  default-scheduler  Successfully assigned default/wordpress-pod to docker-desktop
+  Normal   Pulling    5m52s (x4 over 17m)  kubelet            Pulling image "wordpress:5.2.3-php7.3-apache"
+  Warning  Failed     2m36s (x4 over 14m)  kubelet            Failed to pull image "wordpress:5.2.3-php7.3-apache": rpc error: code = Unknown desc = context deadline exceeded
+  Warning  Failed     2m36s (x4 over 14m)  kubelet            Error: ErrImagePull
+  Normal   BackOff    106s (x8 over 14m)   kubelet            Back-off pulling image "wordpress:5.2.3-php7.3-apache"
+  Warning  Failed     106s (x8 over 14m)   kubelet            Error: ImagePullBackOff
+matsumotonorio@matsumotogaseinoMacBook-Pro kubernetes % kubectl logs  --all-containers
+
+dockerのimageは元々pullしておかないとダメっぽいのでdocker image pull xxxxx をする必要がある
+
+```
+
+ログ
+
+```
+kubectl logs  -f wordpress-pod --tail=10
+WordPress not found in /var/www/html - copying now...
+Complete! WordPress has been successfully copied to /var/www/html
+No 'wp-config.php' found in /var/www/html, but 'WORDPRESS_...' variables supplied; copying 'wp-config-docker.php' (WORDPRESS_DB_HOST WORDPRESS_DB_NAME WORDPRESS_DB_PASSWORD WORDPRESS_DB_USER WORDPRESS_SERVICE_PORT WORDPRESS_SERVICE_PORT_80_TCP WORDPRESS_SERVICE_PORT_80_TCP_ADDR WORDPRESS_SERVICE_PORT_80_TCP_PORT WORDPRESS_SERVICE_PORT_80_TCP_PROTO WORDPRESS_SERVICE_SERVICE_HOST WORDPRESS_SERVICE_SERVICE_PORT)
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.1.0.31. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.1.0.31. Set the 'ServerName' directive globally to suppress this message
+[Tue Jan 23 12:48:18.322868 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.0.28 configured -- resuming normal operations
+[Tue Jan 23 12:48:18.322935 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+```

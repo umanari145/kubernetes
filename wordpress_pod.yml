@@ -6,17 +6,17 @@ metadata:
     svc2pod: wordpress
 spec:
   containers:
-  - name: wordpress
-    image: wordpress:5.2.3-php7.3-apache
-    ports:
-    - name: http
-      containerPort: 80
-    env:
-    - name: WORDPRESS_DB_HOST
-      value: mysql-service:3306
-    - name: WORDPRESS_DB_USER
-      value: wordpress
-    - name: WORDPRESS_DB_PASSWORD
-      value: wordpress-pass
-    - name: WORDPRESS_DB_NAME
-      value: wordpress
+    - name: wordpress
+      image: wordpress:6.2.1-apache
+      ports:
+        - name: http
+          containerPort: 80
+      env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql-service:3306
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+        - name: WORDPRESS_DB_PASSWORD
+          value: wordpress-pass
+        - name: WORDPRESS_DB_NAME
+          value: wordpress

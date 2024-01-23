@@ -6,7 +6,7 @@ spec:
   selector:
     svc2pod: wordpress
   ports:
-  - port: 80
-    targetPort: http
-  sessionAffinity: ClientIP
-  type: LoadBalancer
+    - port: 80
+      targetPort: http
+      nodePort: 30000
+  type: NodePort
