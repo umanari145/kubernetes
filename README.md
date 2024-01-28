@@ -294,3 +294,31 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 [Tue Jan 23 12:48:18.322868 2024] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.0.28 configured -- resuming normal operations
 [Tue Jan 23 12:48:18.322935 2024] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
 ```
+
+```
+kubectl get events
+LAST SEEN   TYPE      REASON          OBJECT        MESSAGE
+13m         Normal    Scheduled       pod/web-pod   Successfully assigned default/web-pod to docker-desktop
+13m         Normal    Pulled          pod/web-pod   Container image "nginx:1.17.6-alpine" already present on machine
+13m         Normal    Created         pod/web-pod   Created container nginx
+13m         Normal    Started         pod/web-pod   Started container nginx
+4m59s       Normal    Killing         pod/web-pod   Stopping container nginx
+4m59s       Warning   FailedKillPod   pod/web-pod   error killing pod: failed to "KillContainer" for "nginx" with KillContainerError: "rpc error: code = Unknown desc = Error response from daemon: No such container: 584b125bb4ed8de4b434234c7f9227c471bd2be49dde999a4d37f3e17c9d2f93"
+3m44s       Normal    Scheduled       pod/web-pod   Successfully assigned default/web-pod to docker-desktop
+3m44s       Normal    Pulled          pod/web-pod   Container image "nginx:1.17.6-alpine" already present on machine
+3m44s       Normal    Created         pod/web-pod   Created container nginx
+3m44s       Normal    Started         pod/web-pod   Started container nginx
+```
+
+### yaml ファイルの書き方
+
+https://qiita.com/Mayumi_Pythonista/items/a249792da8ef4638e125
+
+### pod に直アクセス
+
+kubectl port-forward [Pod 名] ローカルポート:Pod 内の Pod
+
+```
+// pod名 web-pod 内部ポート(containerPort:80の場合)
+kubectl port-forward web-pod 8080:80
+```

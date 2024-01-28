@@ -4,9 +4,9 @@ metadata:
   name: web-service
 spec:
   selector:
-    svc2pod: web
-  ports: 
-  - port: 80
-    targetPort: http
-    nodePort: 30000
+    app: web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
   type: NodePort
