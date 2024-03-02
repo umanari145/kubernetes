@@ -328,3 +328,38 @@ kubectl port-forward web-pod 8080:80
 ローリングアップデートとロールバック: Deployment を使用すると、アプリケーションの更新を段階的に行い、問題が発生した場合は以前のバージョンに簡単に戻すことができます。
 スケーリング: Deployment を使用すると、Pod の数を簡単に増減させることができます。
 したがって、単純なテストや一時的なワークロードでない限り、Deployment を使用することでアプリケーションの管理が容易になり、より堅牢で管理しやすい Kubernetes の環境を構築できます。
+
+基本的には pod の拡張版と考えてよく、deployment があれば pod は不要
+
+適用も通常の apply コマンドで OK
+
+```
+kubectl apply -f wordpress_deployment.yml
+```
+
+pod の状況
+
+以下のような pod が生成される
+
+```
+kubectl get pods
+NAME                                    READY   STATUS    RESTARTS   AGE
+wordpress-deployment-77788b4998-477d2   1/1     Running   0          20m
+wordpress-deployment-77788b4998-mb65b   1/1     Running   0          20m
+wordpress-deployment-77788b4998-rj7kj   1/1     Running   0          20m
+```
+
+replica set(起動される pod の数)
+
+```
+kubectl get rs
+NAME                              DESIRED   CURRENT   READY   AGE
+wordpress-deployment-77788b4998   3         3         3       17m
+
+kubectl get deployment
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+wordpress-deployment   3/3     3            3           26m
+
+```
+
+仮に pod を`kubectl delete wordpress-deployment-77788b4998-477d2` のようなコマンドで除去しても復活する。
