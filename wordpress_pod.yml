@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: wordpress-pod
   labels:
-    svc2pod: wordpress
+    app: wordpress
 spec:
   containers:
     - name: wordpress

@@ -4,8 +4,8 @@ metadata:
   name: mysql-service
 spec:
   selector:
-    svc2pod: mysql
+    app: mysql
   ports:
-  - port: 3306
-    targetPort: mysql
+    - port: 3306
+      targetPort: mysql
   type: ClusterIP

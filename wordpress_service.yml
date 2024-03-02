@@ -4,9 +4,9 @@ metadata:
   name: wordpress-service
 spec:
   selector:
-    svc2pod: wordpress
+    app: wordpress
   ports:
     - port: 80
-      targetPort: http
-      nodePort: 30000
-  type: NodePort
+      targetPort: 80
+      protocol: TCP
+  type: LoadBalancer

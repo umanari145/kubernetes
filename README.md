@@ -255,8 +255,8 @@ kubectl apply -f wordpress_pod.yml -f wordpress_service.yml
 
 ```
 
-http://localhost/
-で wordpress ログイン画面へ遷移
+`minikube service wordpress-service --url`
+トンネリングされた url で wordpress ログイン画面へ遷移
 
 デバッグ
 
@@ -319,3 +319,12 @@ kubectl port-forward [Pod 名] ローカルポート:Pod 内の Pod
 // pod名 web-pod 内部ポート(containerPort:80の場合)
 kubectl port-forward web-pod 8080:80
 ```
+
+### Deployment の必要性
+
+主に pod のコントロールで以下のような機能がある。
+
+自動修復: Pod が失敗した場合、Deployment は自動的に新しい Pod を起動して置き換えます。
+ローリングアップデートとロールバック: Deployment を使用すると、アプリケーションの更新を段階的に行い、問題が発生した場合は以前のバージョンに簡単に戻すことができます。
+スケーリング: Deployment を使用すると、Pod の数を簡単に増減させることができます。
+したがって、単純なテストや一時的なワークロードでない限り、Deployment を使用することでアプリケーションの管理が容易になり、より堅牢で管理しやすい Kubernetes の環境を構築できます。
