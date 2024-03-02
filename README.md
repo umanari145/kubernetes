@@ -199,21 +199,11 @@ pod の中に入る(docker exec -it と同じっぽい)
 kubectl exec -it nginx sh
 ```
 
-アクセスできるようにする
-
-```
-kubectl expose deployment nginx --port 80 --type LoadBalancer
-```
-
 pod の削除
 
 ```
 kubectl delete pod mynginx
 ```
-
-kubernetes を起動すると当たり前だが docker も合わせて起動している
-
-https://qiita.com/nyanchu/items/ecb16ad3ad1f491b5131
 
 ### yaml ファイルでの起動
 
@@ -237,15 +227,22 @@ kubectl delete -f pod.yml(service.yml)
 ```
 kubectl get services
 //動いているサービスと実際に紐づいてるサービスを確認できる
-NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-kubernetes    ClusterIP   10.96.0.1       <none>        443/TCP        93m
-web-service   NodePort    10.98.120.120   <none>        80:30000/TCP   14s
+NAME          TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes    ClusterIP      10.96.0.1       <none>        443/TCP        4h
+web-service   LoadBalancer   10.109.29.221   <pending>     80:32460/TCP   70s
 ```
 
-この段階で下記 URL にアクセスして、nginx の画面が見えれば OK
-http://localhost:30000/
+minikube なのでトンネリングを使う
 
-もちろん docker も起動している
+```
+minikube service web-service --url
+http://127.0.0.1:56668
+❗ Docker ドライバーを darwin 上で使用しているため、実行するにはターミナルを開く必要があります。
+```
+
+この場合、
+http://127.0.0.1:56668
+にアクセスすれば OK
 
 ### wordpress+mysql
 
